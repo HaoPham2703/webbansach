@@ -1,5 +1,6 @@
 <?php
 session_start(); // Bắt đầu phiên đăng nhập
+ob_start();
 
 include "head.php";
 $title = "Shop huy";
@@ -7,6 +8,9 @@ $name = "Điện thoại";
 include "top.php";
 include "Header.php";
 include "navigation.php";
+
+// Kết nối đến cơ sở dữ liệu MySQL
+require "inc/myconnect.php"; // Thay đổi tên file và đường dẫn phù hợp với cài đặt của bạn
 ?>
 
 <!--//////////////////////////////////////////////////-->
@@ -30,10 +34,11 @@ include "navigation.php";
             <div class="col-md-6">
                 <!-- Hiển thị thông tin từ phiên đăng nhập -->
                 
-                <p><strong>Họ và tên:</strong> <?php echo isset($_SESSION['HoTen']) ? $_SESSION['HoTen'] : ''; ?></p>
-                <p><strong>Email:</strong> <?php echo isset($_SESSION['email']) ? $_SESSION['email'] : ''; ?></p>
-                <p><strong>Điện thoại:</strong> <?php echo isset($_SESSION['dienthoai']) ? $_SESSION['dienthoai'] : ''; ?></p>
-                <p><strong>Địa chỉ:</strong> <?php echo isset($_SESSION['diachi']) ? $_SESSION['diachi'] : ''; ?></p>
+                <p><strong>Họ và tên:</strong> <?php echo isset($_SESSION['HoTen']) ? htmlspecialchars($_SESSION['HoTen']) : ''; ?></p>
+                <p><strong>Email:</strong> <?php echo isset($_SESSION['email']) ? htmlspecialchars($_SESSION['email']) : ''; ?></p>
+                <p><strong>Điện thoại:</strong> <?php echo isset($_SESSION['dienthoai']) ? htmlspecialchars($_SESSION['dienthoai']) : ''; ?></p>
+                <p><strong>Địa chỉ:</strong> <?php echo isset($_SESSION['dia_chi']) ? htmlspecialchars($_SESSION['dia_chi']) : ''; ?></p>
+
                 <!-- Thêm nút sửa thông tin -->
                 <a href="edit_profile.php" class="btn btn-primary">Sửa Profile</a>
             </div>
