@@ -60,11 +60,11 @@ ob_start();
 			                    <form role="form" action="<?php include "loginAdmin.php" ?>" method="post" class="login-form">
 			                    	<div class="form-group">
 			                    		<label class="sr-only" for="form-username" >Tàikhoản</label>
-			                        	<input type="text" name="txtdangnhap" placeholder="Tài khoản..." value="admin" class="form-username form-control" id="form-username" required>
+			                        	<input type="text" name="txtdangnhap" placeholder="Tài khoản..."  class="form-username form-control" id="form-username" required>
 			                        </div>
 			                        <div class="form-group">
 			                        	<label class="sr-only" for="form-password">Mậtkhẩu</label>
-			                        	<input type="password" name="txtmatkhau" placeholder="Mật khẩu..." value="admin" class="form-password form-control" id="form-password" required>
+			                        	<input type="password" name="txtmatkhau" placeholder="Mật khẩu..."  class="form-password form-control" id="form-password" required>
 			                        </div>
                                     <button type="submit" name="dnhapadmin"class="btn">Sign in!</button>
                                     <p style="color:red"><?php echo  $kq ?></p>

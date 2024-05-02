@@ -1,12 +1,10 @@
 <?php
+session_start(); // Start the session
 ob_start();
 ?>
 <?php
-require "login.php";
-if (!isset($_SESSION['txtus'])) {
-    header("Location: account.php");
-    exit;
-}
+
+
 
 if (!isset($_SESSION['cart']) || count($_SESSION['cart']) === 0) {
     header("Location: baogiohangtrong.php");
@@ -46,29 +44,28 @@ include "navigation.php";
                                 <label>Email:<?php echo $_SESSION['email']?></label>
 
                                 <label>
-                                    <input type="radio" name="address_option" value="account_address" checked>
-                                    Địa chỉ theo tài khoản
+                                    <br>
                                 </label>
+                                <br>
                                 <label>
-                                    <input type="radio" name="address_option" value="other_address">
-                                    Địa chỉ khác
+                                    
+                                    Địa chỉ giao hàng
                                 </label>
 
-                                <div id="other_address_input" style="display: none;">
+                                <div id="other_address_input" >
                                     <input type="text" class="form-control" placeholder="Nhập địa chỉ giao hàng" name="other_address" required>
                                 </div>
 								
-                                <div id="account_address_input">
-                                    <label>Địa chỉ: <?php echo $_SESSION['dia_chi'] ?></label>
-                                </div>
+                               
 
                                 <br/>
-
-                                <label><input type="date" class="form-control" placeholder="Ngày giao  :" name="date" id="datechoose" required ></label>
+                                
+                                
+                                <label>Ngày giao hàng dự kiến: <br> <input type="date" class="form-control" placeholder="Ngày giao  :" name="date" id="datechoose" required readonly></label>
                                 <label> Hình thức thanh toán :
                                     <select class="selectpicker" name="hinhthuctt">
                                         <option value="ATM">Trả thẻ</option>
-                                        <option value="Live">Trực tiếp</option>
+                                        <option value="COD">Cod</option>
                                     </select>
                                 </label>
                             </div>
@@ -232,15 +229,20 @@ include "navigation.php";
 <script>
     var date = new Date();
 
-    var day = date.getDate();
-    var month = date.getMonth() + 1;
-    var year = date.getFullYear();
+    var date = new Date();
 
-    if (month < 10) month = "0" + month;
-    if (day < 10) day = "0" + day;
+// Thêm 5 ngày vào ngày hiện tại
+date.setDate(date.getDate() + 5);
 
-    var today = year + "-" + month + "-" + day;
-    document.getElementById("datechoose").value = today;
+var day = date.getDate();
+var month = date.getMonth() + 1;
+var year = date.getFullYear();
+
+if (month < 10) month = "0" + month;
+if (day < 10) day = "0" + day;
+
+var today = year + "-" + month + "-" + day;
+document.getElementById("datechoose").value = today;
 </script>
 
 <script src="plugins/select2/select2.full.min.js"></script>
@@ -250,16 +252,12 @@ include "navigation.php";
     });
 </script>
 
-<script>
-    document.querySelectorAll('input[name="address_option"]').forEach(function(radio) {
-        radio.addEventListener('change', function() {
-            if (this.value === "other_address") {
-                document.getElementById('other_address_input').style.display = 'block';
-                document.getElementById('account_address_input').style.display = 'none';
-            } else {
-                document.getElementById('other_address_input').style.display = 'none';
-                document.getElementById('account_address_input').style.display = 'block';
-            }
-        });
-    });
-</script>
+
+
+<?php
+// Calculate the total amount
+$total_amount = $total; // Assuming $total is already calculated
+
+// Store the total amount in the session
+$_SESSION['tongtien'] = $total_amount;
+?>

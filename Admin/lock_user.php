@@ -1,5 +1,7 @@
 <?php
 include "head.php";
+
+include "../inc/myconnect.php";
 ?>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -24,47 +26,45 @@ include "head.php";
             <div class="box">
               <div class="box-header">
                 <h3 class="box-title">Quản lý khách hàng</h3>
-                <div class="box-tools">
-                  <a href="themkh.php" class="btn btn-primary">Thêm mới</a> <!-- Thêm nút Thêm mới -->
-                </div>
               </div><!-- /.box-header -->
               <div class="box-body">
-                <table id="example1" class="table table-bordered table-striped">
-                  <thead>
-                    <tr>
-                      <th>Email</th>
-                      <th>Họ tên</th>
-                      <th>Số điện thoại</th>
-                      <th>Địa chỉ</th>
-                      <th>Mật khẩu</th>
-                      <th>Thao tác</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <?php
-                    require '../inc/myconnect.php';
-                    $sql = "SELECT email, HoTen, DienThoai, dia_chi, matkhau, user_id FROM loginuser ORDER BY HoTen";
-                    $result = $conn->query($sql);
-                    if ($result->num_rows > 0) {
-                      while ($row = $result->fetch_assoc()) {
+                <?php
+                // Kiểm tra xem có user_id được gửi từ trang quản lý không
+                if (isset($_GET['user_id'])) {
+                    // Lấy user_id từ URL
+                    $user_id = $_GET['user_id'];
+
+                    // Kiểm tra xem có dữ liệu nhập chi tiết không
+                    if (isset($_POST['chitietkhoa']) && !empty($_POST['chitietkhoa'])) {
+                        // Lấy chi tiết nhập từ form
+                        $chitietkhoa = $_POST['chitietkhoa'];
+
+                        // Truy vấn để cập nhật cột 'khoatk' thành 1 (đã khoá) và nhập chi tiết khoá cho user có user_id tương ứng
+                        $sql = "UPDATE loginuser SET khoatk = 1, chitietkhoa = '$chitietkhoa' WHERE user_id = $user_id";
+
+                        if ($conn->query($sql) === TRUE) {
+                            // Nếu truy vấn thành công, hiển thị thông báo thành công
+                            echo '<div class="alert alert-success">Khoá người dùng thành công.</div>';
+                            echo '<a href="qlykhachhang.php" class="btn btn-default">Trở về</a>';
+                        } else {
+                            // Nếu có lỗi trong quá trình truy vấn, hiển thị thông báo lỗi
+                            echo '<div class="alert alert-danger">Lỗi: ' . $conn->error . '</div>';
+                        }
+                    } else {
+                        // Nếu không có dữ liệu nhập chi tiết, hiển thị form để nhập chi tiết khoá
                         ?>
-                        <tr>
-                          <td><?php echo $row["email"] ?></td>
-                          <td><?php echo $row["HoTen"] ?></td>
-                          <td><?php echo $row["DienThoai"] ?></td>
-                          <td><?php echo $row["dia_chi"] ?></td>
-                          <td><?php echo $row["matkhau"] ?></td>
-                          <td>
-                            <!-- Thêm nút Khoá người dùng và sử dụng JavaScript để hiển thị hộp thoại xác nhận -->
-                            <button onclick="confirmLockUser(<?php echo $row['user_id']; ?>)" class="btn btn-danger">Khoá</button>
-                          </td>
-                        </tr>
-                    <?php
-                      }
+                        <h2>Nhập chi tiết khoá</h2>
+                        <form action="" method="post">
+                            <textarea name="chitietkhoa" rows="4" cols="50" required></textarea><br><br>
+                            <input type="submit" value="Khoá" class="btn btn-danger">
+                        </form>
+                <?php
                     }
-                    ?>
-                  </tbody>
-                </table>
+                } else {
+                    // Nếu không có user_id được gửi từ trang quản lý, hiển thị thông báo lỗi
+                    echo '<div class="alert alert-danger">Không có user_id được gửi.</div>';
+                }
+                ?>
               </div><!-- /.box-body -->
             </div><!-- /.box -->
           </div><!-- /.col -->
@@ -109,15 +109,6 @@ include "head.php";
     });
   </script>
 
-  <script>
-    // Hàm JavaScript để hiển thị hộp thoại xác nhận khi nhấp vào nút Khoá
-    function confirmLockUser(userId) {
-      if (confirm('Bạn có chắc chắn muốn khoá người dùng này không?')) {
-        // Nếu người dùng xác nhận, chuyển hướng đến trang xử lý khoá người dùng với userId
-        window.location.href = 'lock_user.php?user_id=' + userId;
-      }
-    }
-  </script>
 </body>
 
 </html>

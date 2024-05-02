@@ -1,72 +1,104 @@
 <?php
-session_start(); // Bắt đầu session
+session_start();
 if (!isset($_SESSION['txtus'])) {
     header("Location: account.php");
     exit();
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Lấy thông tin từ form
-    $diachi = $_POST['diachi'];
-    $date = $_POST['date'];
-    $hinhthuctt = $_POST['hinhthuctt'];
-    $dichvu = isset($_POST['dichvu']) ? $_POST['dichvu'] : array();
-    $total = $_POST['total'];
-    $madv = $_POST['madv'];
+require "inc/myconnect.php";
 
-    // Kết nối tới CSDL
-    require "inc/myconnect.php"; // Kết nối CSDL
+$sql = "SELECT hd.diachi, hd.ngaygiao, hd.hinhthucthanhtoan, hd.thanhtien, ctdh.madv, sp.Ten AS tensp, ctdh.soluong, ctdh.dongia
+        FROM hoadon hd
+        LEFT JOIN chitiethoadon ctdh ON hd.sodh = ctdh.sodh
+        LEFT JOIN sanpham sp ON ctdh.masp = sp.ID
+        WHERE hd.sodh = (SELECT sodh FROM hoadon ORDER BY sodh DESC LIMIT 1)";
 
-    // Chuẩn bị truy vấn SQL để lưu đơn hàng vào bảng donhang
-    $sql = "INSERT INTO donhang (diachi, ngaygiaohang, hinhthucthanhtoan, tongtien) VALUES (?, ?, ?, ?)";
+$result = $conn->query($sql);
 
-    // Sử dụng prepared statement để tránh lỗ hổng SQL Injection
-    $stmt = $conn->prepare($sql);
-    
-    // Bind các giá trị vào statement
-    $stmt->bind_param("sssi", $diachi, $date, $hinhthuctt, $total);
-
-    // Thực thi truy vấn
-    $stmt->execute();
-
-    // Lấy ID của đơn hàng vừa được thêm vào
-    $donhang_id = $stmt->insert_id;
-
-    // Đóng prepared statement
-    $stmt->close();
-
-    // Lưu thông tin về các dịch vụ được chọn vào bảng chitietdonhang
-    if (!empty($dichvu)) {
-        // Chuẩn bị truy vấn SQL để lưu chi tiết đơn hàng vào bảng chitietdonhang
-        $sql_chi_tiet = "INSERT INTO chitietdonhang (donhang_id, madv) VALUES (?, ?)";
-        $stmt_chi_tiet = $conn->prepare($sql_chi_tiet);
-
-        // Lặp qua mỗi dịch vụ được chọn và thêm vào bảng chitietdonhang
-        foreach ($dichvu as $madv) {
-            // Bind các giá trị vào statement
-            $stmt_chi_tiet->bind_param("ii", $donhang_id, $madv);
-
-            // Thực thi truy vấn
-            $stmt_chi_tiet->execute();
-        }
-
-        // Đóng prepared statement
-        $stmt_chi_tiet->close();
-    }
-
-    // Đóng kết nối tới CSDL
-    $conn->close();
-
-    // Sau khi lưu đơn hàng, bạn có thể xoá giỏ hàng đã đặt
-    // unset($_SESSION['cart']);
-
-    // Hoặc làm bất kỳ xử lý nào khác, chẳng hạn gửi email xác nhận đơn hàng cho khách hàng
-    // Sau đó, chuyển hướng người dùng đến trang xác nhận đơn hàng hoặc trang chính
-    header("Location: xacnhandonhangthanhcong.php");
+if (!$result) {
+    echo "Lỗi khi thực thi truy vấn: " . $conn->error;
     exit();
+}
+
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $diachi = $row['diachi'];
+    $date = $row['ngaygiao'];
+    $hinhthuctt = $row['hinhthucthanhtoan'];
+    $total = $row['thanhtien'];
+    $madv = $row['madv'];
+?>
+
+    <?php include "head.php" ?>
+    <?php include "top.php" ?>
+    <?php include "Header.php" ?>
+    <?php include "navigation.php" ?>
+
+    <div id="page-content" class="single-page">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <ul class="breadcrumb">
+                        <li><a href="index.php">Trang chủ</a></li>
+                        <li><a href="contact.php">Liên hệ</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="heading">
+                        <h1>Xác nhận đơn hàng</h1>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Thông tin đơn hàng:</div>
+                        <div class="panel-body">
+                            <p><strong>Địa chỉ:</strong> <?php echo $diachi; ?></p>
+                            <p><strong>Ngày giao hàng:</strong> <?php echo $date; ?></p>
+                            <p><strong>Hình thức thanh toán:</strong> <?php echo $hinhthuctt; ?></p>
+                            <p><strong>Tổng tiền:</strong> <?php echo $total; ?></p>
+                            <p><strong>Mã dịch vụ:</strong> <?php echo $madv; ?></p>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Sản phẩm đã đặt:</div>
+                        <div class="panel-body">
+                            <ul class="list-group">
+                                <?php
+                                $result->data_seek(0);
+                                while ($product = $result->fetch_assoc()) {
+                                ?>
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <h4 class="list-group-item-heading"><?php echo $product['tensp']; ?></h4>
+                                                <p class="list-group-item-text">Số lượng: <?php echo $product['soluong']; ?></p>
+                                            </div>
+                                            <div class="col-md-6 text-right"> <!-- Thêm class text-right để căn lề phải -->
+                                            <p class="list-group-item-text"><strong>Đơn giá: <?php echo number_format($product['dongia'], 0, ',', '.') ?>.000 VNĐ</strong></p> <!-- Thêm thẻ strong để làm đậm chữ Đơn giá -->
+                                            </div>
+                                        </div>
+                                    </li>
+                                <?php
+                                }
+                                ?>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <?php include "footer.php" ?>
+
+    </body>
+
+    </html>
+
+<?php
 } else {
-    // Nếu không phải là phương thức POST, chuyển hướng về trang chính
-    header("Location: index.php");
-    exit();
+    echo "Không tìm thấy đơn hàng mới nhất.";
 }
 ?>

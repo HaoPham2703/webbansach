@@ -1,5 +1,6 @@
 <?php
 ob_start();
+
 ?>
 <?php 
 	include "head.php"

@@ -43,8 +43,9 @@ if(isset($_POST['submit'])) {
         $_SESSION['txtus'] = $tk;
         $_SESSION['HoTen'] = $row["HoTen"];
         $_SESSION['email'] = $row["email"];
+        $_SESSION['matkhau'] = $row["matkhau"];
         $_SESSION['dienthoai'] = $row["DienThoai"];
-        header('Location: cart.php');
+        header('Location: ktkhoanguoidung.php');
     } else {
         $kq ="Thông tin không đúng vui lòng kiểm tra lại";
     }

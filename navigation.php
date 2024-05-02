@@ -28,7 +28,7 @@
 				</li>
 				<li><a href="cart.php">Giỏ hàng</a></li>
 				<li><a href="contact.php">Liên hệ</a></li>
-				<li><a href="kiemtradonhang.php">Kiểm tra đơn hàng</a></li>
+				<li><a href="prekiemtradonhang.php">Kiểm tra đơn hàng</a></li>
 			</ul>
 		</div>
 	</div>
