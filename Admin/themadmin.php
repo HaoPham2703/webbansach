@@ -14,7 +14,7 @@ include "head.php";
       <section class="content-header">
         <h1>
           Thêm
-          <small>khách hàng</small>
+          <small>Admin</small>
         </h1>
       </section>
 
@@ -25,33 +25,28 @@ include "head.php";
             <!-- Horizontal Form -->
             <div class="box box-info">
               <div class="box-header with-border">
-                <h3 class="box-title">Thêm khách hàng</h3>
+                <h3 class="box-title">Thêm Admin</h3>
               </div><!-- /.box-header -->
               <!-- form start -->
-              <form class="form-horizontal" method="POST" action="xulythemkh.php">
+              <form class="form-horizontal" method="POST" action="xulythemadmin.php">
                 <div class="box-body">
                   <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
                     <div class="col-sm-10">
-                      <input type="email" name="email" class="form-control" placeholder="Nhập địa chỉ email" required>
+                      <input type="email" name="email_ql" class="form-control" placeholder="Nhập địa chỉ email" required>
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-2 control-label">Ten dang nhap</label>
+                    <div class="col-sm-10">
+                      <input type="text" name="tendangnhap" class="form-control" placeholder="Nhập ten dang nhap" required>
                     </div>
                   </div>
                   <div class="form-group">
-                    <label for="inputEmail3" class="col-sm-2 control-label">Họ tên</label>
+                    <label for="inputEmail3" class="col-sm-2 control-label">Ten quan ly</label>
                     <div class="col-sm-10">
-                      <input type="text" name="HoTen" class="form-control" placeholder="Nhập họ tên" required>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label for="inputEmail3" class="col-sm-2 control-label">Số điện thoại</label>
-                    <div class="col-sm-10">
-                      <input type="text" name="DienThoai" class="form-control" placeholder="Nhập số điện thoại" required>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label for="inputEmail3" class="col-sm-2 control-label">Địa chỉ</label>
-                    <div class="col-sm-10">
-                      <input type="text" name="dia_chi" class="form-control" placeholder="Nhập địa chỉ" required>
+                      <input type="text" name="ten_ql" class="form-control" placeholder="Nhập ten qly" required>
                     </div>
                   </div>
                   <div class="form-group">

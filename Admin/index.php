@@ -107,6 +107,7 @@ if (!isset($_SESSION['tendangnhap'])) // If session is not set then redirect to 
               </div>
               <a href="quanlyhoadon.php" class="small-box-footer">Xem danh Sách <i class="fa fa-arrow-circle-right"></i></a>
             </div>
+            
           </div><!-- ./col -->
         </div><!-- /.row -->
         <!-- Main row -->

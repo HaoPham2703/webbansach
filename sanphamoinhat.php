@@ -7,7 +7,7 @@
             <?php
             while ($row = $result->fetch_assoc()) {
                 $productName = $row["Ten"];
-                $productNameDisplay = mb_strlen($productName, 'UTF-8') > 20 ? mb_substr($productName, 0, 20, 'UTF-8') . '...' : $productName;
+                $productNameDisplay = mb_strlen($productName, 'UTF-8') > 26 ? mb_substr($productName, 0, 26, 'UTF-8') . '...' : $productName;
             ?>
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                     <div class="product">
@@ -42,9 +42,9 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     function shortenProductName(name) {
-        return name.length > 29 ? name.substring(0, 29) + '...' : name;
+        return name.length > 26 ? name.substring(0, 26) + '...' : name;
     }
-    
+
     $(document).ready(function() {
         loadProducts(1);
 
@@ -63,11 +63,11 @@
                 },
                 success: function(response) {
                     // Rút gọn tên sản phẩm trước khi hiển thị
-                    response.products_html = response.products_html.replace(/(<?php echo $productName; ?>)/g, function(match) {
-                        return shortenProductName(match);
-                    });
-                    
                     $('#product-list').html(response.products_html);
+                    $('#product-list .name a').each(function() {
+                        var productName = $(this).text();
+                        $(this).text(shortenProductName(productName));
+                    });
                     $('#pagination').html(response.pagination_html);
                 }
             });

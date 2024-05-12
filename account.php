@@ -74,7 +74,10 @@ if(isset($_POST['dangky'])) {
     $check_email_query = "SELECT * FROM loginuser WHERE email = '$email'";
     $check_email_result = $conn->query($check_email_query);
 
-    if($check_email_result->num_rows > 0) {
+    // Kiểm tra định dạng email bằng regex
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $kqdk = "Định dạng email không hợp lệ";
+    } elseif($check_email_result->num_rows > 0) {
         $kqdk = "Email đã tồn tại. Vui lòng chọn một email khác.";
     } elseif($repass != $mk) {
         $kqdk = "Mật khẩu nhập lại không chính xác";
@@ -157,10 +160,13 @@ if(isset($_POST['dangky'])) {
                     <button type="submit" name="dangky" class="btn btn-1">Đăng ký</button>
                     <p style="color:red"><?php echo $kqdk; ?></p>
                 </form>
+                
             </div>
         </div>
     </div>
 </div>
+
+
 
 <?php 
 include "footer.php";

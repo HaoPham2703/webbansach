@@ -38,7 +38,9 @@
         <ul class="treeview-menu">
           <li><a href="quanlyhoadon.php"><i class="fa fa-circle-o"></i> Danh Sách hóa đơn</a></li>
           <li><a href="qlykhachhang.php"><i class="fa fa-circle-o"></i> Danh Sách khách hàng</a></li>
+          <li><a href="thongke.php"><i class="fa fa-circle-o"></i> Thống kê</a></li>
         </ul>
+      </li>         
       </li>
   </section>
   <!-- /.sidebar -->

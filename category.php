@@ -37,13 +37,69 @@ include "navigation.php";
                 <div class="row">
                     <div class="col-md-12">
                         <div class="text-right">
-                            <a href="category.php?manhasx=<?php echo isset($_GET['manhasx']) ? $_GET['manhasx'] : ''; ?>&sort=gia-cao-nhat" class="btn btn-default">Giá từ cao đến thấp</a>
-                            <a href="category.php?manhasx=<?php echo isset($_GET['manhasx']) ? $_GET['manhasx'] : ''; ?>&sort=gia-thap-nhat" class="btn btn-default">Giá từ thấp đến cao</a>
-                            
+                            <button onclick="filterAndSort1('<?php echo isset($_GET['manhasx']) ? $_GET['manhasx'] : ''; ?>', 'gia-cao-nhat', '<?php echo isset($_GET['price']) ? $_GET['price'] : ''; ?>')" class="btn <?php echo (isset($_GET['sort']) && $_GET['sort'] == 'gia-cao-nhat') ? 'btn-primary' : 'btn-default'; ?>">
+                                Giá: cao -> thấp <i class="fas fa-sort-amount-down"></i>
+                            </button>
+                            <button onclick="filterAndSort1('<?php echo isset($_GET['manhasx']) ? $_GET['manhasx'] : ''; ?>', 'gia-thap-nhat', '<?php echo isset($_GET['price']) ? $_GET['price'] : ''; ?>')" class="btn <?php echo (isset($_GET['sort']) && $_GET['sort'] == 'gia-thap-nhat') ? 'btn-primary' : 'btn-default'; ?>">
+                                Giá: thấp -> cao <i class="fas fa-sort-amount-up"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
                 <!-- Kết thúc các nút sắp xếp -->
+
+                <!-- Thêm các nút lọc giá -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="text-right">
+                            <!-- Thêm các nút hoặc dropdown lọc giá -->
+                            <button onclick="filterAndSort2('<?php echo isset($_GET['manhasx']) ? $_GET['manhasx'] : ''; ?>', '<?php echo isset($_GET['sort']) ? $_GET['sort'] : ''; ?>', 'lt-100')" class="btn <?php echo (isset($_GET['price']) && $_GET['price'] == 'lt-100') ? 'btn-primary' : 'btn-default'; ?>">Nhỏ hơn 100,000₫</button>
+                            <button onclick="filterAndSort2('<?php echo isset($_GET['manhasx']) ? $_GET['manhasx'] : ''; ?>', '<?php echo isset($_GET['sort']) ? $_GET['sort'] : ''; ?>', '100-200')" class="btn <?php echo (isset($_GET['price']) && $_GET['price'] == '100-200') ? 'btn-primary' : 'btn-default'; ?>">Từ 100,000₫ - 200,000₫</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Kết thúc các nút lọc giá -->
+                <!-- Sờ cờ ríp -->
+                <script>
+                    var currentSort = '<?php echo isset($_GET['sort']) ? $_GET['sort'] : ''; ?>';
+                    
+
+                    function filterAndSort1(manhasx, sort, price) {
+                        // Kiểm tra và cập nhật trạng thái của các nút sắp xếp
+                        if (sort === currentSort) {
+                            currentSort = ''; // Nếu nút đã được chọn, đặt lại trạng thái về mặc định
+                        } else {
+                            currentSort = sort; // Nếu nút không được chọn, đặt trạng thái mới
+                        }
+
+                       
+
+                        // Xây dựng URL mới dựa trên trạng thái mới của các nút
+                        var url = 'category.php?manhasx=' + manhasx + '&sort=' + currentSort + '&price=' + currentPrice;
+                        window.location.href = url; // Chuyển hướng đến trang mới với các tham số đã được cập nhật
+                    }
+                </script>
+                <script>
+                    
+                    var currentPrice = '<?php echo isset($_GET['price']) ? $_GET['price'] : ''; ?>';
+
+                    function filterAndSort2(manhasx, sort, price) {
+                        // Kiểm tra và cập nhật trạng thái của các nút sắp xếp
+                        
+
+                        // Kiểm tra và cập nhật trạng thái của các nút lọc giá
+                        if (price === currentPrice) {
+                            currentPrice = ''; // Nếu nút đã được chọn, đặt lại trạng thái về mặc định
+                        } else {
+                            currentPrice = price; // Nếu nút không được chọn, đặt trạng thái mới
+                        }
+
+                        // Xây dựng URL mới dựa trên trạng thái mới của các nút
+                        var url = 'category.php?manhasx=' + manhasx + '&sort=' + currentSort + '&price=' + currentPrice;
+                        window.location.href = url; // Chuyển hướng đến trang mới với các tham số đã được cập nhật
+                    }
+                </script>
+                <!--  -->
 
                 <div class="row">
                     <div class="col-md-12">
@@ -53,6 +109,7 @@ include "navigation.php";
 
                             $manhasx = isset($_GET["manhasx"]) ? $_GET["manhasx"] : '';
                             $sort = isset($_GET["sort"]) ? $_GET["sort"] : '';
+                            $price_filter = isset($_GET['price']) ? $_GET['price'] : '';
 
                             $sql_query = "SELECT * FROM sanpham";
 
@@ -67,11 +124,20 @@ include "navigation.php";
                                 case 'gia-thap-nhat':
                                     $sql_query .= " ORDER BY Gia ASC";
                                     break;
-                                case 'moi-nhat':
-                                    $sql_query .= " ORDER BY NgayCapNhat DESC";
-                                    break;
+
                                 default:
                                     $sql_query .= " ORDER BY ID ASC";
+                            }
+
+                            switch ($price_filter) {
+                                case 'lt-100':
+                                    $sql_query = "SELECT * FROM sanpham WHERE Gia < 100";
+                                    break;
+                                case '100-200':
+                                    $sql_query = "SELECT * FROM sanpham WHERE Gia >= 100 AND Gia < 200";
+                                    break;
+                                default:
+                                    // Không thêm bất kỳ điều kiện lọc nào nếu không có lựa chọn
                             }
 
                             $result = mysqli_query($conn, $sql_query);
@@ -132,16 +198,24 @@ include "navigation.php";
                 <div class="row text-center">
                     <ul class="pagination">
                         <?php
-                        for ($i = 1; $i <= $total_page; $i++) {
+                        // Hiển thị nút trang đầu tiên
+                        if ($current_page > 2) {
+                            echo '<li><a href="category.php?manhasx=' . $manhasx . '&sort=' . $sort . '&page=1">1</a></li>';
+                        }
+
+                        // Hiển thị các nút trang
+                        for ($i = max(1, $current_page - 1); $i <= min($current_page + 1, $total_page); $i++) {
                             if ($i == $current_page) {
-                        ?>
-                                <li class="active"><a href="#"><?php echo $i ?></a></li>
-                            <?php
+                                echo '<li class="active"><a href="#">' . $i . '</a></li>';
                             } else {
-                            ?>
-                                <li><?php echo '<a href="category.php?manhasx=' . $manhasx . '&sort=' . $sort . '&page=' . $i . '">' . $i . '</a> '; ?></li>
-                        <?php
+                                echo '<li><a href="category.php?manhasx=' . $manhasx . '&sort=' . $sort . '&page=' . $i . '">' . $i . '</a></li>';
                             }
+                        }
+
+                        // Hiển thị nút trang cuối cùng và dấu "..."
+                        if ($current_page < $total_page - 1) {
+                            echo '<li><a href="#">...</a></li>';
+                            echo '<li><a href="category.php?manhasx=' . $manhasx . '&sort=' . $sort . '&page=' . $total_page . '">' . $total_page . '</a></li>';
                         }
                         ?>
                     </ul>

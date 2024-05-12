@@ -1,28 +1,5 @@
 <div id="sidebar" class="col-md-4">
-	<div class="widget wid-categories">
-		<div class="heading" onclick="togglePublisherMenu()">
-			<h4>Nhà xuất bản <i class="fas fa-caret-down"></i></h4>
-		</div>
-		<div class="content" id="publisherMenu" style="display: none;">
-			<ul>
-				<?php
-				require 'inc/myconnect.php';
-				$layidrandom = "SELECT ID, Ten FROM nhaxuatban";
-				$kq = $conn->query($layidrandom);
-				if ($kq->num_rows > 0) {
-					while ($d = $kq->fetch_assoc()) {
-						$publisherId = $d["ID"];
-						$publisherName = $d["Ten"];
-						$isActive = isset($_GET['manhasx']) && $_GET['manhasx'] == $publisherId ? 'text-primary' : '';
-				?>
-						<li><a id="publisher_<?php echo $publisherId ?>" href="javascript:void(0);" onclick="togglePublisherFilter('<?php echo $publisherId ?>')" class="<?php echo $isActive ?>"><?php echo $publisherName ?></a></li>
-				<?php
-					}
-				}
-				?>
-			</ul>
-		</div>
-	</div>
+	
 	<div class="widget wid-product">
 		<div class="heading">
 			<h4>Sách mới nhất</h4>

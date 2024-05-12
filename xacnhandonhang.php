@@ -55,9 +55,9 @@ if ($result->num_rows > 0) {
                         <div class="panel-heading">Thông tin đơn hàng:</div>
                         <div class="panel-body">
                             <p><strong>Địa chỉ:</strong> <?php echo $diachi; ?></p>
-                            <p><strong>Ngày giao hàng:</strong> <?php echo $date; ?></p>
+                            <p><strong>Ngày giao hàng dự kiến:</strong> <?php echo $date; ?></p>
                             <p><strong>Hình thức thanh toán:</strong> <?php echo $hinhthuctt; ?></p>
-                            <p><strong>Tổng tiền:</strong> <?php echo $total; ?></p>
+                            <p><strong>Tổng tiền:</strong> <?php echo $total; ?>0VND</p>
                             <p><strong>Mã dịch vụ:</strong> <?php echo $madv; ?></p>
                         </div>
                     </div>

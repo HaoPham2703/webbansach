@@ -35,17 +35,17 @@ if(isset($_POST['Dat'])) {
         $email = $_SESSION['email'];
         $ngaygiao = isset($_POST['date']) ? $_POST['date'] : '';
         $tenkh = $_SESSION['HoTen'];
-        $diachi = isset($_POST['other_address']) ? $_POST['other_address'] : (isset($_SESSION['dia_chi']) ? $_SESSION['dia_chi'] : '');
+        $diachigh = isset($_POST['other_address']) ? $_POST['other_address'] : (isset($_SESSION['dia_chi']) ? $_SESSION['dia_chi'] : '');
 
         // Lưu địa chỉ vào session
-        $_SESSION['dia_chi'] = $diachi;
+        $_SESSION['dia_chigh'] = $diachigh;
 
         $dienthoai = $_SESSION['dienthoai'];
         $hinhthucthanhtoan = isset($_POST['hinhthuctt']) ? $_POST['hinhthuctt'] : ''; 
 
         // Thêm thông tin đơn hàng vào bảng hoadon
         $sql1 = "INSERT INTO hoadon (emailkh, ngaygiao, tenkh, diachi, dienthoai, user_id, hinhthucthanhtoan, thanhtien)
-                VALUES ('$email', '$ngaygiao', '$tenkh', '$diachi', '$dienthoai', '$user_id', '$hinhthucthanhtoan', '$total_amount')";
+                VALUES ('$email', '$ngaygiao', '$tenkh', '$diachigh', '$dienthoai', '$user_id', '$hinhthucthanhtoan', '$total_amount')";
 
         if ($conn->query($sql1) === TRUE) {
             $sodh = $conn->insert_id; // Lấy số đơn hàng vừa tạo

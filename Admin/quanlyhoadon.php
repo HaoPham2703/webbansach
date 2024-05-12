@@ -1,8 +1,11 @@
 <?php include "head.php"; ?>
 <body class="hold-transition skin-blue sidebar-mini">
     <div class="wrapper">
-        <?php include "Header.php"; ?> 
-        <?php include "aside.php"; ?>
+    <?php include "Header.php"; ?> 
+
+    <?php include "aside.php"; ?>
+   
+    
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
@@ -13,7 +16,7 @@
                     <small>hóa đơn</small>
                 </h1>
             </section>
-
+            
             <!-- Main content -->
             <section class="content">
                 <div class="row">
@@ -25,13 +28,16 @@
                             <div class="box-body">
                                 <table id="example1" class="table table-bordered table-striped">
                                     <thead>
+                                    
+
                                         <tr>
                                             <th>Số đơn hàng</th>
                                             <th>Tên Sách</th>
                                             <th>Số lượng</th>
                                             <th>Đơn giá</th>
                                             <th>Thành tiền</th> 
-                                            <th>Ngày giao hàng</th>       
+                                            <th>Ngày giao hàng</th> 
+                                            <th>Địa chỉ</th>       
                                             <th>Dịch vụ</th> 
                                             <th>Chi tiết đơn hàng</th>              
                                         </tr>
@@ -40,7 +46,7 @@
                                         <?php
                                             require '../inc/myconnect.php';
                                             $sql="SELECT h.sodh,soluong,dongia,h.thanhtien
-                                            ,s.Ten as tensanpham,ngaygiao,madv
+                                            ,s.Ten as tensanpham,ngaygiao,diachi,madv
                                             from chitiethoadon c 
                                             LEFT JOIN sanpham s on s.ID= c.masp
                                             LEFT JOIN hoadon h on h.sodh= c.sodh Order by h.sodh  ";
@@ -61,7 +67,10 @@
                                             <td><?php  echo $row["dongia"] ?>.000 VNĐ</td>
                                             <td><?php  echo $row["thanhtien"] ?>0 VNĐ</td>  
                                             <td><?php echo date_format(date_create($row["ngaygiao"]), "d/m/Y"); ?></td>   
+                                            <td><?php  echo $row["diachi"] ?></td>  
+
                                             <td>
+                                            
                                                 <?php
                                                 if($row["madv"]!= "") {
                                                     $ma = $row["madv"];
@@ -81,6 +90,9 @@
                                             }
                                         }
                                         ?>
+                                        <div class="filter-container">
+  
+
                                     </tbody>                   
                                 </table>
                             </div><!-- /.box-body -->
@@ -89,6 +101,11 @@
                 </div><!-- /.row -->
             </section><!-- /.content -->
         </div><!-- /.content-wrapper -->
+        
+       
+        
+        
+        
         <?php include "footer.php"; ?>
         <?php include "ControlSidebar.php"; ?>
         <!-- Control Sidebar -->

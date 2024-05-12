@@ -62,7 +62,7 @@ if (!isset($_SESSION['cart']) || !is_array($_SESSION['cart']) || empty($_SESSION
                 $total += $subtotal;
                 $totalQuantity += $quantity; // Cộng dồn số lượng sản phẩm
             }
-            ?>
+        ?>
 
             <div class="row">
                 <form name="form5" id="ff5" method="POST" action="removecart.php">
@@ -90,9 +90,10 @@ if (!isset($_SESSION['cart']) || !is_array($_SESSION['cart']) || empty($_SESSION
                                     <?php endif; ?>
                                 </div>
                                 <label>Số lượng:</label>
-                                <input class="form-inline quantity" style="margin-right: 80px;width:50px" min="1" max="99" type="number" name="qty[<?php echo $productId ?>]" value="<?php echo $quantity ?>">
+                                <input class="form-inline quantity" style="margin-right: 80px;width:50px" min="1" max="99" type="number" name="qty[<?php echo $productId ?>]" value="<?php echo $quantity ?>" onchange="updateQuantity(<?php echo $productId ?>, this.value)">
+
                                 <div>
-                                    <input type="submit" name="update" style="margin-top:31px" value="Cập nhật sản phẩm này" class="btn btn-2" />
+                                <input type="submit" name="update" id="updateButton" style="margin-top:31px" value="Cập nhật sản phẩm này" class="btn btn-2" />
                                 </div>
                                 <hr>
                                 <input type="submit" name="remove" value="Xóa sản phẩm này" class="btn btn-default pull-right" style="color: black;" />
@@ -100,6 +101,10 @@ if (!isset($_SESSION['cart']) || !is_array($_SESSION['cart']) || empty($_SESSION
                                 <label style="color:red">Thành tiền: <?php echo $subtotal ?>.000</label>
                             </div>
                         </div>
+
+                        
+
+
                         <div class="clear"></div>
                     </div>
                 </form>
@@ -124,7 +129,9 @@ if (!isset($_SESSION['cart']) || !is_array($_SESSION['cart']) || empty($_SESSION
                                 <td><?php echo $totalQuantity ?></td> <!-- Hiển thị tổng số lượng sản phẩm -->
                             </tr>
                             <tr style="border-top: 1px solid #333">
-                                <td><h5>Tổng cộng</h5></td>
+                                <td>
+                                    <h5>Tổng cộng</h5>
+                                </td>
                                 <td><?php echo $total ?>.000</td>
                             </tr>
                         </table>
@@ -139,5 +146,6 @@ if (!isset($_SESSION['cart']) || !is_array($_SESSION['cart']) || empty($_SESSION
 include "footer.php";
 ?>
 </body>
+
 </html>
 <?php ob_end_flush(); ?>

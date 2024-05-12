@@ -1,6 +1,6 @@
 <?php
 ob_start();
-
+session_start();
 ?>
 <?php 
 	include "head.php"
@@ -13,7 +13,7 @@ $name ="Điện thoai";
 	include "top.php"
     ?>
     <?php 
-    session_start();
+    
 	include "header.php"
 	?>
 	<?php 
