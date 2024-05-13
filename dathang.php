@@ -3,6 +3,23 @@ session_start(); // Start the session
 ob_start();
 ?>
 <?php
+require "inc/myconnect.php";
+
+// Lấy email từ session
+$email = $_SESSION['txtus'];
+
+// Query để lấy user_id và địa chỉ từ bảng loginuser dựa trên email
+$sql = "SELECT user_id, dia_chi FROM loginuser WHERE email = '$email'";
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    // Đăng nhập thành công, lưu user_id và địa chỉ vào session
+    $row = $result->fetch_assoc();
+    
+    $_SESSION['diachiht'] = $row['dia_chi'];
+    
+}
+    
 
 
 
@@ -54,7 +71,7 @@ include "navigation.php";
                                         Địa Chỉ Hiện Tại
                                     </label>
                                     <div id="currentAddress" style="display: none;">
-                                        <?php echo isset($_SESSION['diachitk']) ? htmlspecialchars($_SESSION['diachitk']) : '' ?>
+                                        <?php echo isset($_SESSION['diachiht']) ? htmlspecialchars($_SESSION['diachiht']) : '' ?>
                                     </div>
                                 </div>
 
@@ -70,7 +87,7 @@ include "navigation.php";
 
                                         if (checkbox.checked) {
                                             currentAddress.style.display = "block";
-                                            otherAddressInput.value = "<?php echo isset($_SESSION['diachitk']) ? htmlspecialchars($_SESSION['diachitk']) : ''; ?>";
+                                            otherAddressInput.value = "<?php echo isset($_SESSION['diachiht']) ? htmlspecialchars($_SESSION['diachiht']) : ''; ?>";
                                             otherAddressInput.setAttribute("readonly", "readonly"); // Make input readonly
                                         } else {
                                             currentAddress.style.display = "none";

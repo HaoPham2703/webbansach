@@ -17,9 +17,10 @@ $result = $conn->query($sql);
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
     if ($row['khoatk'] == 1) {
+        echo '<div class="heading"><h1>Tài khoản của bạn đã bị khoá</h1></div>';
+       echo' <li><a href="account.php">Quay lại đăng nhập</a></li>';
         // Nếu tài khoản đã bị khoá, chuyển hướng đến trang khoanguoidung.php
-        header('Location: khoanguoidung.php');
-        exit;
+                exit;
     } else {
         // Nếu không, chuyển hướng đến trang index.php
         header('Location: index.php');

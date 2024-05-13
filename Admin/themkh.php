@@ -62,7 +62,7 @@ include "head.php";
                   </div>
                 </div><!-- /.box-body -->
                 <div class="box-footer">
-                  <a href="quanlyadmin.php"><button type="button" name="cancel" class="btn btn-default">Cancel</button></a>
+                  <a href="qlykhachhang.php"><button type="button" name="cancel" class="btn btn-default">Cancel</button></a>
                   <button type="submit" name="create" class="btn btn-info pull-right">Create</button>
                 </div><!-- /.box-footer -->
               </form>
